@@ -125,18 +125,36 @@ def x_filter(param=Const.TRAIN, other=Const.OTHER):
     print user_label_rate2
 
 
-def mach_X_and_label(param=Const.TRAIN, other=Const.OTHER):
+def mach_label_with_X(param=Const.TRAIN, other=Const.OTHER):
 
     index = ['user_id', 'item_id']
-    process_data =GetProcessedData(param)
+    process_data = GetProcessedData(param=param, other=other)
     X = process_data.get_X().set_index(index)
-    label = process_data.get_X().set_index(index)
+    label = process_data.get_label().set_index(index)
+    X_minus_label_index = X.index.difference(label.index)
+    label_minus_X_index = label.index.difference(X.index)
+    left_label_index = label.index.difference(label_minus_X_index)
+
+    label = label.ix[left_label_index]
+    add_label = pd.DataFrame(0, index=X_minus_label_index, columns=['is_buy'])
+    label = pd.concat([label, add_label], axis=0)
+
+    new_data = Data(other.PROCESSED_DATA_PATH)
+    label.to_sql(param.LABEL_TABLE, new_data.conn, if_exists='replace')
+    new_data.close()
+
 
 if __name__ == "__main__":
     test = GetProcessedData(Const.TRAIN)
-    play = test.get_play_test_data()
+    index = ['user_id', 'item_id']
+    play = test.get_play_test_data().set_index(index)
+    # X = test.get_X().set_index(index)
+    # print len(set(X.index))
     print play[play['filter'] == 0]
-    print play
+    # mach_label_with_X(Const.TRAIN)
+    # mach_label_with_X(Const.TEST)
+
+
 
 
 
