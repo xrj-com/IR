@@ -130,7 +130,7 @@ def mach_X_and_label(param=Const.TRAIN, other=Const.OTHER):
     index = ['user_id', 'item_id']
     process_data =GetProcessedData(param)
     X = process_data.get_X().set_index(index)
-    label = process_data.get_X().set_index(inde)
+    label = process_data.get_X().set_index(index)
 
 if __name__ == "__main__":
     test = GetProcessedData(Const.TRAIN)
