@@ -27,6 +27,29 @@ if __name__ == '__main__':
 
     # clf = train_model(param=Const.TRAIN, other=Const.OTHER)
     # print clf
+
+    # training model
+    # clf = train_model(param=Const.TRAIN, other=Const.OTHER)
+    #
+    #
+    # #save the model
+    # joblib.dump(clf,'./model/demo.pkl')
+    # ##load the model
+    # #clf=joblib.load('./model/demo.pkl')
+    #
+    # # evaluate
+    # py=evaluate(clf)
+    # np.save("prediction_label.npy",py)
+    #
+    # F1,P,R=score(py)
+    # print "F1=",F1
+    # print "P=",P
+    # print "R=",R
+    #
+    # np.save("evaluate.npy",[F1,P,R])
+
+
+
     test = GetProcessedData(Const.TRAIN)
     print test.get_X()
 

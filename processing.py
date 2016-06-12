@@ -144,6 +144,58 @@ def mach_label_with_X(param=Const.TRAIN, other=Const.OTHER):
     new_data.close()
 
 
+def evaluate(clf,param=Const.TEST,other=Const.OTHER):
+    print 'Testing model...'
+
+    X_data = Data(other.PROCESSED_DATA_PATH)
+    X_feature = X_data.query(select_table_sql(param.X_FEATURE_TABLE), index=['user_id', 'item_id'])
+
+    py = clf.predict(X_feature)
+
+    return py
+
+def score(py):
+    ##prediction file
+    prediction = []
+    X_data = Data(Const.OTHER.PROCESSED_DATA_PATH)
+    X_feature = X_data.query(select_table_sql(Const.TEST.X_FEATURE_TABLE), index=['user_id', 'item_id'])
+    i=-1
+    for a in py:
+        i=i+1
+        if a == 1.0:
+            prediction.append((X_feature.index[i][0],X_feature.index[i][1]))
+    prediction = set(prediction)
+
+
+    ##ture file
+    conn = sqlite3.connect('./data/processed_data.db')
+    curs = conn.cursor()
+    curs.execute("select * from " + Const.TEST.LABEL_TABLE)
+    test_label = curs.fetchall()
+    answer = []
+    for i in range(len(test_label)):
+        if test_label[i][2] == 1.0:
+            answer.append((test_label[i][0],test_label[i][1]))
+    answer = set(answer)
+
+
+    ##the true sample
+    inter = prediction & answer
+
+    # print "the number of correct sample:"+len(inter)
+
+    ##compute F1,P,R
+    if len(inter) > 0:
+        a = len(answer)
+        b = len(prediction)
+        c = len(inter)
+        R = 1.0 * c / a * 100
+        P = 1.0 * c / b * 100
+        F1 = 2.0 * R * P / (P + R)
+    return F1,P,R
+
+
+
 if __name__ == "__main__":
     test = GetProcessedData(Const.TRAIN)
     index = ['user_id', 'item_id']
