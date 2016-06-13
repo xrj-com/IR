@@ -83,18 +83,20 @@ def x_filter(param=Const.TRAIN, other=Const.OTHER):
     uibDF2 = uibDF.drop(['item_id'], axis=1)
     grouped = uibDF2.groupby('user_id')
     sum = grouped.sum().reset_index()
-    sum.insert(5, 'sum123+', sum['1'] + sum['2'] + sum['3'] + 0.5)
-    sum.insert(6, '4+', sum['4'] + 0.5)
-    sum.insert(7, 'rate', sum['sum123+'] / sum['4+'])
+    sum.insert(6, 'sum123+', sum['1'] + sum['2'] + sum['3'] + 0.5)
+    sum.insert(7, '4+', sum['4'] + 0.5)
+    sum.insert(8, 'rate', sum['sum123+'] / sum['4+'])
     sum_sorted = sum.sort_values(['rate']).reset_index()
-    print sum_sorted
-    # 找到位于1/3处的rate值和位于2/3处的rate值
 
-    minRate = sum_sorted.iloc[len(sum_sorted.index)/3, 8]
-    maxRate = sum_sorted.iloc[len(sum_sorted.index)*2/3, 8]
+    # 找到位于1/3处的rate值和位于2/3处的rate值
+    minRate = sum_sorted.iloc[len(sum_sorted.index)/3, 9]
+    maxRate = sum_sorted.iloc[len(sum_sorted.index)*2/3, 9]
+
+    print minRate
+    print maxRate
 
     # 将每个用户对应的rate制成user_rate表
-    user_rate = sum_sorted.drop(['index', '1', '2', '3', '4', 'sum123+', '4+'], axis=1)
+    user_rate = sum_sorted.drop(['index', 'level_0','1', '2', '3', '4', 'sum123+', '4+'], axis=1)
 
     # label表中每一个UI对中user对应的rate添加进去并形成新表train_label_rate
     user_label_rate = pd.merge(labelDF, user_rate, on='user_id', how='left')
@@ -102,19 +104,28 @@ def x_filter(param=Const.TRAIN, other=Const.OTHER):
     # 对train_label_rate进行处理，添加一列filter
     # 去除：rate小于minRate且购买了的 或 rate大于maxRate且未购买的
     # 用0表示过滤，1表示保留
-    user_label_rate.insert(5, 'filter', 1)
 
+    filterList=[]
     filterNum = 0
     for x in range(len(labelDF.index)):
         print x
-        if user_label_rate.ix[x][4] < minRate:
-            if user_label_rate.ix[x][3] == 1:
-                user_label_rate.loc[x, 'filter'] = 0
+        if user_label_rate.ix[x]['rate'] < minRate:
+            if user_label_rate.ix[x]['is_buy'] == 1:
+                filterList.append(0)
                 filterNum = filterNum + 1
-        elif user_label_rate.ix[x][4] > maxRate:
-            if user_label_rate.ix[x][3] == 0:
-                user_label_rate.loc[x, 'filter'] = 0
+            else:
+                filterList.append(1)
+        elif user_label_rate.ix[x][3] > maxRate:
+            if user_label_rate.ix[x][2] == 0:
+                filterList.append(0)
                 filterNum = filterNum + 1
+            else:
+                filterList.append(1)
+        else:
+            filterList.append(1)
+
+    filterSeries=pd.Series(filterList,index=user_label_rate.index)
+    user_label_rate['filter']=filterSeries
 
     user_label_rate2 = user_label_rate.drop(['rate'], axis=1)
 
@@ -144,7 +155,7 @@ def mach_label_with_X(param=Const.TRAIN, other=Const.OTHER):
     new_data.close()
 
 
-def evaluate(clf,param=Const.TEST,other=Const.OTHER):
+def evaluate(clf, param=Const.TEST, other=Const.OTHER):
     print 'Testing model...'
 
     X_data = Data(other.PROCESSED_DATA_PATH)
@@ -154,7 +165,9 @@ def evaluate(clf,param=Const.TEST,other=Const.OTHER):
 
     return py
 
+
 def score(py):
+
     ##prediction file
     prediction = []
     X_data = Data(Const.OTHER.PROCESSED_DATA_PATH)
