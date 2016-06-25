@@ -210,15 +210,7 @@ def score(py):
 
 
 if __name__ == "__main__":
-    test = GetProcessedData(Const.TRAIN)
-    index = ['user_id', 'item_id']
-    play = test.get_play_test_data().set_index(index)
-    # X = test.get_X().set_index(index)
-    # print len(set(X.index))
-    print play[play['filter'] == 0]
-    # mach_label_with_X(Const.TRAIN)
-    # mach_label_with_X(Const.TEST)
-
+    x_filter(param=Const.TRAIN, other=Const.OTHER)
 
 
 
