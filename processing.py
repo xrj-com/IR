@@ -76,27 +76,30 @@ def x_filter(param=Const.TRAIN, other=Const.OTHER):
     X_data = Data(other.PROCESSED_DATA_PATH)
     uibDF = X_data.query(select_table_sql(param.X_STATI_BEHAVIOR_TABLE))
     labelDF = X_data.query(select_table_sql(param.LABEL_TABLE))
+
     # conn = sqlite3.connect('./data/train_behavior.db')
     # uibDF = pd.read_sql_query('select* from user_item_behavior', conn, index_col='index')
     # labelDF = pd.read_sql_query('select* from train_label', conn)
 
     uibDF2 = uibDF.drop(['item_id'], axis=1)
+    print uibDF2
     grouped = uibDF2.groupby('user_id')
     sum = grouped.sum().reset_index()
-    sum.insert(6, 'sum123+', sum['1'] + sum['2'] + sum['3'] + 0.5)
-    sum.insert(7, '4+', sum['4'] + 0.5)
-    sum.insert(8, 'rate', sum['sum123+'] / sum['4+'])
+    print sum
+    sum.insert(5, 'sum123+', sum['1'] + sum['2'] + sum['3'] + 0.5)
+    sum.insert(6, '4+', sum['4'] + 0.5)
+    sum.insert(7, 'rate', sum['sum123+'] / sum['4+'])
     sum_sorted = sum.sort_values(['rate']).reset_index()
 
     # 找到位于1/3处的rate值和位于2/3处的rate值
-    minRate = sum_sorted.iloc[len(sum_sorted.index)/3, 9]
-    maxRate = sum_sorted.iloc[len(sum_sorted.index)*2/3, 9]
+    minRate = sum_sorted.iloc[len(sum_sorted.index)/3, 8]
+    maxRate = sum_sorted.iloc[len(sum_sorted.index)*2/3, 8]
 
     print minRate
     print maxRate
 
     # 将每个用户对应的rate制成user_rate表
-    user_rate = sum_sorted.drop(['index', 'level_0','1', '2', '3', '4', 'sum123+', '4+'], axis=1)
+    user_rate = sum_sorted.drop(['index', '1', '2', '3', '4', 'sum123+', '4+'], axis=1)
 
     # label表中每一个UI对中user对应的rate添加进去并形成新表train_label_rate
     user_label_rate = pd.merge(labelDF, user_rate, on='user_id', how='left')
@@ -130,7 +133,7 @@ def x_filter(param=Const.TRAIN, other=Const.OTHER):
     user_label_rate2 = user_label_rate.drop(['rate'], axis=1)
 
     # 需要的话可以用这一句将生成的表写入数据库
-    user_label_rate2.to_sql(other.DATA_TEST_TABLE, X_data.conn, if_exists='replace')
+    user_label_rate2.to_sql(param.X_FIL, X_data.conn, if_exists='replace')
 
 
     print user_label_rate2

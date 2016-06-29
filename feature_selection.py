@@ -1,19 +1,41 @@
+# -*- coding:utf-8 -*-
 from processing import *
 from behavior_stat import *
 from my_parameter import *
 
 
-def feature_to_db(param=Const.TRAIN, other=Const.OTHER, is_test=True):
+def feature_to_db(param=Const.TRAIN, other=Const.OTHER):
 
-    X_data = Data(other.PROCESSED_DATA_PATH)
+    read_data = GetProcessedData(param)
 
-    X_feature = X_data.query(select_table_sql(param.X_STATI_BEHAVIOR_TABLE), index=['user_id', 'item_id'])
+    mainData = read_data.get_fil_X()
+    label = read_data.get_label()
 
-    X_feature.to_sql(param.X_FEATURE_TABLE, X_data.conn, if_exists='replace')
 
 
-    if is_test:
-        test = X_data.query(select_table_sql(param.X_FEATURE_TABLE), index=['user_id', 'item_id'])
-        print test
 
-    X_data.close()
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    print X_feature
+
+
+    # save data
+    # temp = Data(other.PROCESSED_DATA_PATH)
+    # X_feature.to_sql(param.X_FEATURE_TABLE, temp.conn, if_exists='replace')
+    # read_data.close()
+    # temp.close()
+
+if __name__ == '__main__':
+    feature_to_db(param=Const.TRAIN, other=Const.OTHER)

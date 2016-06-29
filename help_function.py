@@ -47,6 +47,10 @@ class GetProcessedData:
         count = self.Data.query(select_table_sql(self.param.X_STATI_BEHAVIOR_TABLE))
         return count
 
+    def get_fil_X(self):
+        fil_X = self.Data.query(select_table_sql(self.param.X_FIL))
+        return fil_X
+
     def get_play_test_data(self):
         play = self.Data.query(select_table_sql(self.other.DATA_TEST_TABLE))
         return play
@@ -77,7 +81,7 @@ def select_table_sql(table_name):
 if __name__ == '__main__':
 
     test = GetProcessedData(Const.TRAIN)
-    test.param
-    print df
+
+    print test.get_behavior_count()
 
 

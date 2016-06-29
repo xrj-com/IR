@@ -5,11 +5,12 @@
 class Const:
     # train data time range and table
     class TRAIN:
-        X_TIME_BEGIN = "2014-12-14 00"
+        X_TIME_BEGIN = "2014-12-11 00"
         X_TIME_END = "2014-12-16 23"
         X_TABLE = 'train_x'
         X_FEATURE_TABLE = 'train_feature'
         X_STATI_BEHAVIOR_TABLE = 'train_behavior'
+        X_FIL = 'train_fil_x'
 
         LABEL_BEGIN = "2014-12-17 00"
         LABEL_END = "2014-12-17 23"
@@ -20,11 +21,12 @@ class Const:
 
     # test data time range and table
     class TEST:
-        X_TIME_BEGIN = "2014-12-15 00"
+        X_TIME_BEGIN = "2014-12-12 00"
         X_TIME_END = "2014-12-17 23"
         X_TABLE = 'test_x'
         X_FEATURE_TABLE = 'test_feature'
         X_STATI_BEHAVIOR_TABLE = 'test_behavior'
+        X_FIL = 'test_fil_x'
 
         LABEL_BEGIN = "2014-12-18 00"
         LABEL_END = "2014-12-18 23"
