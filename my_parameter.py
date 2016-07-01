@@ -10,11 +10,11 @@ class Const:
         X_TABLE = 'train_x'
         X_FEATURE_TABLE = 'train_feature'
         X_STATI_BEHAVIOR_TABLE = 'train_behavior'
-        X_FIL = 'train_fil_x'
 
         LABEL_BEGIN = "2014-12-17 00"
         LABEL_END = "2014-12-17 23"
         LABEL_TABLE = 'train_label'
+        LABEL_FIL_TABLE = 'train_fil_label'
 
         def __init__(self):
             pass
@@ -26,11 +26,11 @@ class Const:
         X_TABLE = 'test_x'
         X_FEATURE_TABLE = 'test_feature'
         X_STATI_BEHAVIOR_TABLE = 'test_behavior'
-        X_FIL = 'test_fil_x'
 
         LABEL_BEGIN = "2014-12-18 00"
         LABEL_END = "2014-12-18 23"
         LABEL_TABLE = 'test_label'
+        LABEL_FIL_TABLE = 'test_fil_label'
 
         def __init__(self):
             pass

@@ -128,12 +128,12 @@ def x_filter(param=Const.TRAIN, other=Const.OTHER):
             filterList.append(1)
 
     filterSeries=pd.Series(filterList,index=user_label_rate.index)
-    user_label_rate['filter']=filterSeries
+    user_label_rate['filter'] = filterSeries
 
     user_label_rate2 = user_label_rate.drop(['rate'], axis=1)
 
     # 需要的话可以用这一句将生成的表写入数据库
-    user_label_rate2.to_sql(param.X_FIL, X_data.conn, if_exists='replace')
+    user_label_rate2.to_sql(param.LABEL_FIL_TABLE, X_data.conn, if_exists='replace')
 
 
     print user_label_rate2

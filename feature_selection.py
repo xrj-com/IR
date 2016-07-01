@@ -8,11 +8,12 @@ def feature_to_db(param=Const.TRAIN, other=Const.OTHER):
 
     read_data = GetProcessedData(param)
 
-    mainData = read_data.get_fil_X()
-    label = read_data.get_label()
+    label = read_data.get_fil_label()
+    Orig_X = read_data.get_X()
 
 
-
+    print label
+    print Orig_X
 
 
 

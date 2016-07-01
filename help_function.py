@@ -14,7 +14,7 @@ class Data:
         self.conn.close()
 
     def query(self, str_sql, index=None):
-        if index == None:
+        if index is None:
             data = sql.read_sql(str_sql, self.conn)
         else:
             data = sql.read_sql(str_sql, self.conn, index_col=index)
@@ -47,9 +47,9 @@ class GetProcessedData:
         count = self.Data.query(select_table_sql(self.param.X_STATI_BEHAVIOR_TABLE))
         return count
 
-    def get_fil_X(self):
-        fil_X = self.Data.query(select_table_sql(self.param.X_FIL))
-        return fil_X
+    def get_fil_label(self):
+        fil_label = self.Data.query(select_table_sql(self.param.LABEL_FIL_TABLE))
+        return fil_label
 
     def get_play_test_data(self):
         play = self.Data.query(select_table_sql(self.other.DATA_TEST_TABLE))
@@ -57,6 +57,10 @@ class GetProcessedData:
 
     def close(self):
         self.Data.close()
+
+
+def drop_table_sql(table_name):
+    return 'drop table '+table_name
 
 
 def select_label_sql(param=Const.TRAIN, other=Const.OTHER):
@@ -79,9 +83,11 @@ def select_table_sql(table_name):
 
 
 if __name__ == '__main__':
-
-    test = GetProcessedData(Const.TRAIN)
-
-    print test.get_behavior_count()
+    pass
+    # test = Data(Const.OTHER.PROCESSED_DATA_PATH)
+    # test.query(drop_table_sql('train_fil_x'))
+    # test.close()
+    # test = GetProcessedData()
+    # test.get_fil_X()
 
 
