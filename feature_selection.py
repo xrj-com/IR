@@ -29,7 +29,7 @@ def feature_to_db(param=Const.TRAIN, other=Const.OTHER):
 
 
 
-    print X_feature
+    # print X_feature
 
 
     # save data

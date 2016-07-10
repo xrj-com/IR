@@ -18,10 +18,12 @@ if __name__ == '__main__':
 
     ######################################################################
     # for the test set
+
     # slice_x_to_db(param=Const.TEST, other=Const.OTHER, is_test=True)
     # get_label_to_db(param=Const.TEST, other=Const.OTHER, is_test=True)
     # mach_label_with_X(Const.TEST)
-    # behavior_stat_to_db(param=Const.TEST, other=Const.OTHER, process_num=12)
+    # behavior_stat_to_db2(param=Const.TEST, other=Const.OTHER)
+    # x_filter(param=Const.TEST, other=Const.OTHER)
     # feature_to_db(param=Const.TEST, other=Const.OTHER)
 
     # training model
